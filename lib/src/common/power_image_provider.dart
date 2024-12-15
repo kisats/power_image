@@ -104,7 +104,7 @@ abstract class PowerImageProvider extends ImageProviderExt<PowerImageProvider> {
   }
 
   @override
-  int get hashCode => hashValues(options, scale);
+  int get hashCode => Object.hash(options, scale);
 
   @override
   String toString() => '$runtimeType("$options", scale: $scale)';

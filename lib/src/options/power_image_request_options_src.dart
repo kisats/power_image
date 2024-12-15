@@ -91,5 +91,5 @@ class PowerImageRequestOptionsSrcAsset extends PowerImageRequestOptionsSrc {
   }
 
   @override
-  int get hashCode => hashValues(src, package);
+  int get hashCode => Object.hash(src, package);
 }

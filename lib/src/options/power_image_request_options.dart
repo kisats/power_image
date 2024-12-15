@@ -93,5 +93,5 @@ class PowerImageRequestOptions {
 
   @override
   //todo hashValues(src, imageType) will make different hashCode
-  int get hashCode => hashValues(src, imageType, imageWidth, imageHeight);
+  int get hashCode => Object.hash(src, imageType, imageWidth, imageHeight);
 }
