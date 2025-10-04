@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:power_image/src/tools/power_num_safe.dart';
 
 import 'power_image_request_options_src.dart';
@@ -91,7 +90,4 @@ class PowerImageRequestOptions {
         other.imageHeight == imageHeight;
   }
 
-  @override
-  //todo hashValues(src, imageType) will make different hashCode
-  int get hashCode => Object.hash(src, imageType, imageWidth, imageHeight);
 }

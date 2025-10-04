@@ -59,7 +59,7 @@ abstract class PowerImageProvider extends ImageProviderExt<PowerImageProvider> {
         _completer!
           .addOnLastListenerRemovedCallback(() {
             scheduleMicrotask(() {
-              PaintingBinding.instance!.imageCache!.evict(key);
+              PaintingBinding.instance.imageCache.evict(key);
             });
           });
       }
@@ -80,7 +80,7 @@ abstract class PowerImageProvider extends ImageProviderExt<PowerImageProvider> {
       // have had a chance to track the key in the cache at all.
       // Schedule a microtask to give the cache a chance to add the key.
       scheduleMicrotask(() {
-        PaintingBinding.instance!.imageCache!.evict(key);
+        PaintingBinding.instance.imageCache.evict(key);
       });
       rethrow;
     } finally {
@@ -103,8 +103,6 @@ abstract class PowerImageProvider extends ImageProviderExt<PowerImageProvider> {
     return options == typedOther.options && scale == typedOther.scale;
   }
 
-  @override
-  int get hashCode => Object.hash(options, scale);
 
   @override
   String toString() => '$runtimeType("$options", scale: $scale)';
@@ -117,8 +115,7 @@ class PowerImageLoadException implements Exception {
   /// Creates a [PowerImageLoadException] with the specified native State [state]
   /// and request [uniqueKey].
   PowerImageLoadException({required this.nativeResult})
-      : assert(nativeResult != null),
-        _message = 'Power Image request failed. For details, see the variable nativeResult';
+      : _message = 'Power Image request failed. For details, see the variable nativeResult';
 
   /// 0 = {map entry} "success" -> false
   /// 1 = {map entry} "uniqueKey" -> "{src: http://img.alicdn.com//bao//uploaded//i2//O1CN01SNnaus2KLND4UQngH_!!0-fleamarket.jpg}_imageTyp..."
