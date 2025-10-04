@@ -25,20 +25,29 @@ android {
     compileSdkVersion 29
 
     defaultConfig {
-        minSdkVersion 16
-//        externalNativeBuild {
-//            cmake {
-//                cppFlags '-std=c++14'
-//            }
-//        }
+        minSdkVersion 21
+
+        // ndk {
+        //     // ABIs you want .so files for
+        //     abiFilters "arm64-v8a", "armeabi-v7a", "x86", "x86_64"
+        // }
+
+        // externalNativeBuild {
+        //     cmake {
+        //         cppFlags "-std=c++17 -fexceptions -frtti"
+        //     }
+        // }
+
+        
     }
     lintOptions {
         disable 'InvalidPackage'
     }
-//    externalNativeBuild {
-//        cmake {
-//            path file('src/main/cpp/CMakeLists.txt')
-//            version '3.10.2'
-//        }
-//    }
+
+    // externalNativeBuild {
+    //     cmake {
+    //         path "src/main/cpp/CMakeLists.txt"
+    //         version "4.1.1"
+    //     }
+    // }
 }
