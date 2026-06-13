@@ -18,6 +18,7 @@ public abstract class PowerImageBaseRequest {
     protected static final String REQUEST_STATE_INITIALIZE_FAILED = "initializeFailed";
     protected static final String REQUEST_STATE_LOAD_SUCCEED = "loadSucceed";
     protected static final String REQUEST_STATE_LOAD_FAILED = "loadFailed";
+    protected static final String REQUEST_STATE_LOAD_PROGRESS = "loadInProgress";
     protected static final String REQUEST_STATE_RELEASE_SUCCEED = "releaseSucceed";
     protected static final String REQUEST_STATE_RELEASE_FAILED = "releaseFailed";
 
@@ -64,12 +65,27 @@ public abstract class PowerImageBaseRequest {
                     public void onResult(PowerImageResult result) {
                         PowerImageBaseRequest.this.onLoadResult(result);
                     }
+
+                    @Override
+                    public void onProgress(double progress) {
+                        PowerImageBaseRequest.this.onProgress(progress);
+                    }
                 }
         );
     }
 
     void onLoadResult(PowerImageResult result) {
         this.realResult = result;
+    }
+
+    void onProgress(double progress) {
+        PowerImageDispatcher.getInstance().runOnMainThread(new Runnable() {
+            @Override
+            public void run() {
+                PowerImageBaseRequest.this.imageTaskState = REQUEST_STATE_LOAD_PROGRESS;
+                engineContext.sendImageProgressEvent(PowerImageBaseRequest.this.encode(), progress);
+            }
+        });
     }
 
     public void onLoadSuccess() {
