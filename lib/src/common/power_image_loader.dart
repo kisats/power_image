@@ -11,10 +11,12 @@ import 'power_image_channel.dart';
 import 'power_image_request.dart';
 import '../options/power_image_request_options.dart';
 import 'power_image_setup_options.dart';
+import 'package:collection/collection.dart';
 
 class PowerImageCompleter {
   PowerImageRequest? request;
   Completer? completer;
+  Function(double)? onProgress;
 }
 
 class PowerImageLoader {
@@ -40,13 +42,14 @@ class PowerImageLoader {
   }
 
   PowerImageCompleter loadImage(
-    PowerImageRequestOptions options,
+    PowerImageRequestOptions options, {Function(double)? onProgress}
   ) {
     PowerImageRequest request = PowerImageRequest.create(options);
     channel.startImageRequests(<PowerImageRequest>[request]);
     PowerImageCompleter completer = PowerImageCompleter();
     completer.request = request;
     completer.completer = Completer<Map>();
+    completer.onProgress = onProgress;
     completers[request.uniqueKey()] = completer;
     return completer;
   }
@@ -56,6 +59,15 @@ class PowerImageLoader {
     PowerImageCompleter? completer = completers.remove(uniqueKey);
     //todo null case
     completer?.completer?.complete(map);
+  }
+
+  void onImageProgress(Map<dynamic, dynamic> map) async {
+    String? uniqueKey = map['uniqueKey'];
+    double? progress = map['progress'];
+    PowerImageCompleter? completer = completers.entries.firstWhereOrNull((e) => e.key == uniqueKey)?.value;
+    if(progress != null) {
+      completer?.onProgress?.call(progress);
+    }
   }
 
   void releaseImageRequest(PowerImageRequestOptions options) async {

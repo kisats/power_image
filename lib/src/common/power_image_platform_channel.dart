@@ -17,6 +17,10 @@ class PowerImagePlatformChannel extends PowerImageChannelImpl {
     eventHandlers['onReceiveImageEvent'] = (Map<dynamic, dynamic> event) {
       PowerImageLoader.instance.onImageComplete(event);
     };
+    
+    eventHandlers['onReceiveProgressEvent'] = (Map<dynamic, dynamic> event) {
+      PowerImageLoader.instance.onImageProgress(event);
+    };
   }
 
   @override

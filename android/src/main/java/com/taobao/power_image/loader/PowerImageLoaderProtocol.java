@@ -11,6 +11,7 @@ public interface PowerImageLoaderProtocol {
 
     interface PowerImageResponse {
         void onResult(PowerImageResult result);
+        void onProgress(double progress);
     }
 
     void handleRequest(PowerImageRequestConfig request, PowerImageResponse response);

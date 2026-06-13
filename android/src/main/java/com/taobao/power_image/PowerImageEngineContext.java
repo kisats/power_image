@@ -66,6 +66,12 @@ public class PowerImageEngineContext implements MethodChannel.MethodCallHandler 
         }
     }
 
+    public void sendImageProgressEvent(Map<String, Object> event, double progress) {
+        if (powerImageEventSink != null) {
+            powerImageEventSink.sendImageProgressEvent(event, progress);
+        }
+    }
+
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         if ("startImageRequests".equals(call.method)) {
@@ -119,6 +125,15 @@ public class PowerImageEngineContext implements MethodChannel.MethodCallHandler 
             }
             event.put("eventName", "onReceiveImageEvent");
             event.put("success", success);
+            eventSink.success(event);
+        }
+
+        public void sendImageProgressEvent(Map<String, Object> event, double progress) {
+            if (eventSink == null || event == null) {
+                return;
+            }
+            event.put("eventName", "onReceiveProgressEvent");
+            event.put("progress", progress);
             eventSink.success(event);
         }
     }
