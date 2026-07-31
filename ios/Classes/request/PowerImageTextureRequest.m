@@ -40,6 +40,9 @@
     [[PowerImageLoader sharedInstance] handleRequest:self.imageRequestConfig completed:^(PowerImageResult *powerImageResult){
         __strong typeof(self) self = weakSelf;
         [self requestResultWithPowerImageResult:powerImageResult];
+    } progress:^(double progress) {
+        __strong typeof(self) self = weakSelf;
+        [self onLoadProgress:progress];
     }];
 }
 

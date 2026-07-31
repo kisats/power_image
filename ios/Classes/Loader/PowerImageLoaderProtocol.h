@@ -10,9 +10,13 @@
 #import "PowerImageResult.h"
 
 typedef void(^PowerImageLoaderCompletionBlock)(PowerImageResult *powerImageResult);
+typedef void(^PowerImageLoaderProgressBlock)(double progress);
 
 @protocol PowerImageLoaderProtocol <NSObject>
 @required
 - (void)handleRequest:(PowerImageRequestConfig *)requestConfig completed:(PowerImageLoaderCompletionBlock)completedBlock;
+@optional
+- (void)handleRequest:(PowerImageRequestConfig *)requestConfig
+            completed:(PowerImageLoaderCompletionBlock)completedBlock
+             progress:(PowerImageLoaderProgressBlock)progressBlock;
 @end
-

@@ -17,5 +17,7 @@ static NSString * const kPowerImageImageTypeFile = @"file";
 @interface PowerImageLoader : NSObject <PowerImageLoaderProtocol>
 + (instancetype)sharedInstance;
 - (void)registerImageLoader:(id<PowerImageLoaderProtocol>)request forType:(NSString *)type;
+- (void)handleRequest:(PowerImageRequestConfig *)requestConfig
+            completed:(PowerImageLoaderCompletionBlock)completedBlock
+             progress:(PowerImageLoaderProgressBlock)progressBlock;
 @end
-

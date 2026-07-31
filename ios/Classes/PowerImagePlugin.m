@@ -64,5 +64,15 @@
     self.eventSink(event);
 }
 
+- (void)sendImageProgressEvent:(NSMutableDictionary *)event {
+    if (!self.eventSink || !event) {
+        return;
+    }
+
+    event[@"eventName"] = @"onReceiveProgressEvent";
+    event[@"success"] = @YES;
+    self.eventSink(event);
+}
+
 
 @end

@@ -35,8 +35,8 @@ static NSString * const PowerImageRequestRenderTypeTexture = @"texture";
 
 - (void)onLoadSuccess;
 - (void)onLoadFailed:(NSString *)errMsg;
+- (void)onLoadProgress:(double)progress;
 - (void)requestResultWithPowerImageResult:(PowerImageResult *)imageResult;
 
 - (NSMutableDictionary *)encode;
 @end
-

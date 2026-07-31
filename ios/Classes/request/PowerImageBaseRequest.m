@@ -58,6 +58,9 @@
     [[PowerImageLoader sharedInstance] handleRequest:self.imageRequestConfig completed:^(PowerImageResult *powerImageResult){
         __strong typeof(self) self = weakSelf;
         [self requestResultWithPowerImageResult:powerImageResult];
+    } progress:^(double progress) {
+        __strong typeof(self) self = weakSelf;
+        [self onLoadProgress:progress];
     }];
 }
 
@@ -82,6 +85,16 @@
         NSMutableDictionary *event = [self encode];
         event[@"errMsg"] = errMsg;
         [[PowerImagePlugin sharedInstance] sendImageStateEvent:event success:NO];
+    }];
+}
+
+- (void)onLoadProgress:(double)progress {
+    __weak typeof(self) weakSelf = self;
+    [[PowerImageDispatcher sharedInstance] runOnMainThread:^{
+        __strong typeof(self) self = weakSelf;
+        NSMutableDictionary *event = [self encode];
+        event[@"progress"] = @(MIN(MAX(progress, 0), 1));
+        [[PowerImagePlugin sharedInstance] sendImageProgressEvent:event];
     }];
 }
 

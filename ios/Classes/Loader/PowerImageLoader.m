@@ -36,7 +36,17 @@
 }
 
 - (void)handleRequest:(PowerImageRequestConfig *)requestConfig completed:(PowerImageLoaderCompletionBlock)completedBlock {
+    [self handleRequest:requestConfig completed:completedBlock progress:nil];
+}
+
+- (void)handleRequest:(PowerImageRequestConfig *)requestConfig
+            completed:(PowerImageLoaderCompletionBlock)completedBlock
+             progress:(PowerImageLoaderProgressBlock)progressBlock {
     id <PowerImageLoaderProtocol>handler = self.imageLoaders[requestConfig.imageType];
-    [handler handleRequest:requestConfig completed:completedBlock];
+    if ([handler respondsToSelector:@selector(handleRequest:completed:progress:)]) {
+        [handler handleRequest:requestConfig completed:completedBlock progress:progressBlock];
+    } else {
+        [handler handleRequest:requestConfig completed:completedBlock];
+    }
 }
 @end
