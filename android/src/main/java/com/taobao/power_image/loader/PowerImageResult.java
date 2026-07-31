@@ -30,7 +30,7 @@ public class PowerImageResult {
 
     public PowerImageResult(Bitmap bitmap, boolean success, String errMsg, ExtData ext) {
         if(bitmap != null){
-            Context context = PowerImagePlugin.getContext();
+            Context context = PowerImagePlugin.appContext;
             if(context != null){
                 this.image = new FlutterSingleFrameImage(new BitmapDrawable(context.getResources(), bitmap));
             }else {

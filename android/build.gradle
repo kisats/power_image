@@ -22,11 +22,10 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 34
 
     defaultConfig {
         minSdkVersion 21
-
         // ndk {
         //     // ABIs you want .so files for
         //     abiFilters "arm64-v8a", "armeabi-v7a", "x86", "x86_64"
@@ -37,9 +36,13 @@ android {
         //         cppFlags "-std=c++17 -fexceptions -frtti"
         //     }
         // }
-
-        
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }        
+
     lintOptions {
         disable 'InvalidPackage'
     }
