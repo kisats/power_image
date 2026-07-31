@@ -1,35 +1,59 @@
 package com.taobao.power_image
 
-import androidx.annotation.NonNull
-
+import android.content.Context
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
+import com.taobao.power_image.dispatcher.PowerImageDispatcher;
 
-/** PowerImagePlugin */
-class PowerImagePlugin: FlutterPlugin, MethodCallHandler {
-  /// The MethodChannel that will the communication between Flutter and native Android
-  ///
-  /// This local reference serves to register the plugin with the Flutter Engine and unregister it
-  /// when the Flutter Engine is detached from the Activity
-  private lateinit var channel : MethodChannel
+class PowerImagePlugin : FlutterPlugin, MethodCallHandler {
 
-  override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "power_image")
-    channel.setMethodCallHandler(this)
-  }
-
-  override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-    if (call.method == "getPlatformVersion") {
-      result.success("Android ${android.os.Build.VERSION.RELEASE}")
-    } else {
-      result.notImplemented()
+    companion object {
+        @JvmField
+        var appContext: Context? = null
     }
-  }
 
-  override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
-    channel.setMethodCallHandler(null)
-  }
+    private lateinit var channel: MethodChannel
+    private var engineContext: PowerImageEngineContext? = null
+
+    init {
+        System.loadLibrary("powerimage")
+    }
+
+    override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+
+        appContext = binding.applicationContext
+
+        channel = MethodChannel(binding.binaryMessenger, "power_image")
+        channel.setMethodCallHandler(this)
+
+        if (engineContext == null) {
+            engineContext = PowerImageEngineContext()
+        }
+
+        engineContext?.onAttachedToEngine(binding)
+
+        PowerImageDispatcher.getInstance().prepare()
+    }
+
+    override fun onMethodCall(call: MethodCall, result: Result) {
+        when (call.method) {
+            "getPlatformVersion" ->
+                result.success("Android ${android.os.Build.VERSION.RELEASE}")
+
+            else ->
+                result.notImplemented()
+        }
+    }
+
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+
+        engineContext?.onDetached()
+        engineContext = null
+
+        channel.setMethodCallHandler(null)
+        appContext = null
+    }
 }
